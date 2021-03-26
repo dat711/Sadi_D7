@@ -11,9 +11,20 @@ public class Main {
 //        System.out.println(list_name.indexOf("aaaa"));
         CsvHandler ch = CsvHandler.get_instance();
         ch.get_header("./Csv/us_stock.csv");
-        System.out.println(ch.getFilenames().indexOf("./Csv/us_stock.csv"));
-        Scanner sc = ch.getSc_list().get(0);
+////        System.out.println(ch.getFilenames().indexOf("./Csv/us_stock.csv"));
+//        Scanner sc = ch.getSc_list().get(0);
         ch.print_data("./Csv/us_stock.csv");
+
+//        File fis = new File("./Csv/us_stock.csv");
+//        Scanner sc = new Scanner(fis);
+//        int a = 0;
+//        while (sc.hasNextLine()){
+//            if(a== 20){
+//                break;
+//            }
+//            System.out.println(sc.nextLine());
+//            a++;
+//        }
 
 
     }

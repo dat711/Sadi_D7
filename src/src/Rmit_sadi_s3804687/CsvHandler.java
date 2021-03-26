@@ -79,10 +79,10 @@ public class CsvHandler {
 
     public void print_data(String file_name){
         int index = this.filenames.indexOf(file_name);
-        System.out.println(index);
+//        System.out.println(index);
         Scanner this_sc = this.sc_list.get(index);
-        while (this_sc.hasNext()){
-            System.out.println(this_sc.next());
+        while (this_sc.hasNextLine()){
+            System.out.println(this_sc.nextLine());
         }
     }
 }
