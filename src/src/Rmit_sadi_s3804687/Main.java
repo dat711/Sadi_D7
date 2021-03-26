@@ -6,17 +6,14 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws  FileNotFoundException {
-//        Date dob_s1 = new Date(2000,11,7);
-//        Student S1 = new Student("3804687","Dat",dob_s1);
-//        System.out.println(S1);
-//        course sadi = new course("cosc2440","Software something",12);
-//        System.out.println(sadi);
+//        ArrayList<String> list_name = new ArrayList<String>();
+//        list_name.add("aaaa");
+//        System.out.println(list_name.indexOf("aaaa"));
         CsvHandler ch = CsvHandler.get_instance();
         ch.get_header("./Csv/us_stock.csv");
-//        System.out.println(ch.filenames);
-//        System.out.println(ch.headers);
-//        String a = "1234567";
-//        System.out.println(a.substring(1));
+        System.out.println(ch.getFilenames().indexOf("./Csv/us_stock.csv"));
+        Scanner sc = ch.getSc_list().get(0);
+        ch.print_data("./Csv/us_stock.csv");
 
 
     }
