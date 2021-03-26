@@ -7,6 +7,9 @@ public class Main {
         Date dob_s1 = new Date(2000,11,7);
         Student S1 = new Student("3804687","Dat",dob_s1);
         System.out.println(S1);
+        course sadi = new course("cosc2440","Software something",12);
+        System.out.println(sadi);
 
     }
+
 }
