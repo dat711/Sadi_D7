@@ -6,25 +6,37 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws  FileNotFoundException {
-//        ArrayList<String> list_name = new ArrayList<String>();
-//        list_name.add("aaaa");
-//        System.out.println(list_name.indexOf("aaaa"));
-        CsvHandler ch = CsvHandler.get_instance();
-        ch.get_header("./Csv/us_stock.csv");
-////        System.out.println(ch.getFilenames().indexOf("./Csv/us_stock.csv"));
-//        Scanner sc = ch.getSc_list().get(0);
-        ch.print_data("./Csv/us_stock.csv");
+        Date d1 = new Date(2000,12,7);
+        Date d2 = new Date(2001,12,7);
+        Date d3 = new Date(2002,12,7);
+        Date d4 = new Date(2000,11,7);
 
-//        File fis = new File("./Csv/us_stock.csv");
-//        Scanner sc = new Scanner(fis);
-//        int a = 0;
-//        while (sc.hasNextLine()){
-//            if(a== 20){
-//                break;
-//            }
-//            System.out.println(sc.nextLine());
-//            a++;
-//        }
+
+        Student Dat = new Student("s3804687","Dat",d1);
+        Student Hung = new Student("s3804686","Hung",d2);
+        Student Tam = new Student("S3804689","Tam",d3);
+        course c1 = new course("cosc2000","intro to IT",12);
+        course c2 = new course("cosc2007","intro to pro",12);
+        course c3 = new course("cosc2008","intro to IT",12);
+
+        StudentEnrolment SE = StudentEnrolment.getInstance();
+        SE.add_course(c1);
+        SE.add_course(c2);
+        SE.add_course(c3);
+        SE.add_student(Dat);
+        SE.add_student(Tam);
+        SE.add_student(Hung);
+        ArrayList<course>  thelist = SE.getCourseList();
+        for(int i = 0;i < thelist.size();i++){
+            System.out.println(thelist.get(i).getCoursename());
+        }
+
+        ArrayList<Student>  thelist2 = SE.getStudentList();
+        for(int i = 0;i < thelist2.size();i++){
+            System.out.println(thelist2.get(i).getName());
+        }
+
+
 
 
     }

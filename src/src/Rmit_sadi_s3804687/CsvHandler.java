@@ -9,6 +9,7 @@ public class CsvHandler {
     private ArrayList<ArrayList<String>> headers;
     private ArrayList<String> filenames;
     private static CsvHandler singleton = null;
+    private ArrayList<ArrayList<String>> content;
 
     public ArrayList<Scanner> getSc_list() {
         return sc_list;
@@ -79,7 +80,7 @@ public class CsvHandler {
 
     public void print_data(String file_name){
         int index = this.filenames.indexOf(file_name);
-//        System.out.println(index);
+
         Scanner this_sc = this.sc_list.get(index);
         while (this_sc.hasNextLine()){
             System.out.println(this_sc.nextLine());

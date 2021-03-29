@@ -1,13 +1,14 @@
 package Rmit_sadi_s3804687;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Student {
     private String Id;
     private String name;
     private Date Dob;
-
+    private ArrayList<String> courseids;
     public Student() {
     }
 
@@ -17,16 +18,8 @@ public class Student {
         Dob = dob;
     }
 
-    public Student(String id, String name) {
-        Id = id;
-        this.name = name;
-    }
 
-    public Student(Student s){
-        this.Dob = s.getDob();
-        this.name = s.getName();
-//        this.Id = s.getId();
-    }
+
 
 
     public String getId() {
