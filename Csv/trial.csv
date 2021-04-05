@@ -1,0 +1,12 @@
+,"1st Attempt SLA
+(Working Days)",Unnamed: 1,Destination (Buyer),Unnamed: 3,Unnamed: 4,Unnamed: 5
+0,0,0,Metro Manila,Luzon,Visayas,Mindanao
+1,"Origin
+(Seller)",Metro Manila,3 working days,5 working days,7 working days,7 working days
+2,0,Luzon,5 working days,5 working days,7 working days,7 working days
+3,0,Visayas,7 working days,7 working days,7 working days,7 working days
+4,0,Mindanao,7 working days,7 working days,7 working days,7 working days
+5,0,0,0,0,0,0
+6,"Working Days are defined as Mon - Sat, Excluding Public Holidays.",0,0,0,0,0
+7,SLA calculation begins from the next day after pickup (Day 0 = Day of Pickup; Day 1 = Next Day after Pickup),0,0,0,0,0
+8,"2nd Attempt must be no later than 3 working days after the 1st Attempt, regardless of origin to destination route (Day 0 = Day of 1st Attempt; Day 1 = Next Day after 1st Attempt).",0,0,0,0,0

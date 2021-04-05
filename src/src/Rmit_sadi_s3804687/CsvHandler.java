@@ -3,6 +3,7 @@ package Rmit_sadi_s3804687;
 import java.util.ArrayList;
 import java.io.*;
 import java.util.Scanner;
+import java.io.FileWriter;
 
 public class CsvHandler {
     private ArrayList<Scanner> sc_list;
@@ -59,7 +60,7 @@ public class CsvHandler {
         }
     }
 
-    public void get_header(String File_name) throws FileNotFoundException {
+    public void Init_file(String File_name) throws FileNotFoundException {
         FileInputStream fis = new FileInputStream(File_name);
         Scanner this_Sc = new Scanner(fis);
         String First_line = this_Sc.nextLine();
@@ -85,5 +86,44 @@ public class CsvHandler {
         while (this_sc.hasNextLine()){
             System.out.println(this_sc.nextLine());
         }
+    }
+
+    public ArrayList<String[]> get_data(String file_name){
+        int index = this.filenames.indexOf(file_name);
+        Scanner this_sc = this.sc_list.get(index);
+        ArrayList<String[]> returnArr =  new ArrayList<String[]>();
+
+        while(this_sc.hasNextLine()){
+            String thisLine = this_sc.nextLine();
+            returnArr.add(thisLine.split(","));
+        }
+
+        return returnArr;
+    }
+
+
+
+    public boolean save_Data(String file_name,ArrayList<ArrayList<String>> data,ArrayList<String> headers) throws IOException {
+        if (data.get(0).size() != headers.size()){
+            System.out.println("The data and the headers have the wrong data shape");
+            return false;
+
+        }
+
+        FileWriter csvWriter = new FileWriter(file_name);
+        for (int i = 0;i<headers.size();i++){
+            csvWriter.append(headers.get(i));
+            if (i == headers.size()-1){
+                break;
+            }
+            csvWriter.append(",");
+        }
+
+        for (ArrayList<String> row:data){
+            csvWriter.append(String.join(",",row));
+        }
+        csvWriter.flush();
+        csvWriter.close();
+        return true;
     }
 }
