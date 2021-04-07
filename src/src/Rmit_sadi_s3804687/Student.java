@@ -8,7 +8,6 @@ public class Student {
     private String Id;
     private String name;
     private Date Dob;
-    private ArrayList<String> courseids;
     public Student() {
     }
 

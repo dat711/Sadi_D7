@@ -231,14 +231,15 @@ public class StudentEnrolment {
 
     }
     // tested
-    public enrollment get_enrolment(String student,String course){
+    public ArrayList<enrollment> get_enrolment(String student,String course,String semester){
         boolean notfound = true;
-        enrollment returnEnroll = new enrollment();
+        ArrayList<enrollment> returnEnroll = new ArrayList<enrollment>();
+//        enrollment returnEnroll = new enrollment();
         for (int i = 0; i< this.enrollments_his.size();i++){
             enrollment this_e = this.enrollments_his.get(i);
 
-            if ((this_e.getCourseID().equals(course) ) && (this_e.getStuID().equals(student))) {
-                returnEnroll = this_e;
+            if ((this_e.getCourseID().equals(course) ) && (this_e.getStuID().equals(student)) && (this_e.getSemester().equals(semester))) {
+                returnEnroll.add(this_e) ;
                 notfound = false;
                 break;
             }
