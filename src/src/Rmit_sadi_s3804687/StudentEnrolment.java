@@ -1,8 +1,14 @@
 package Rmit_sadi_s3804687;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Arrays;
+import java.io.*;
+
 
 
 public class StudentEnrolment {
@@ -160,12 +166,12 @@ public class StudentEnrolment {
         this.enrollments_his.add(e);
     }
     // tested
-    public void delete_enrolment(String student,String course){
+    public void delete_enrolment(String student,String course,String sem){
         ArrayList<enrollment> temp = new ArrayList<enrollment>() ;
         if (this.getEnrollments_his().size() > 1){
             for (int i = 0; i< this.enrollments_his.size();i++){
                 enrollment this_e = this.enrollments_his.get(i);
-                if ((this_e.getCourseID().equals(course)) && (this_e.getStuID().equals(student) )) {
+                if ((this_e.getCourseID().equals(course)) && (this_e.getStuID().equals(student) && this_e.getSemester().equals(sem))) {
                     temp.addAll(this.enrollments_his.subList(0,i));
                     temp.addAll(this.enrollments_his.subList(i+1,this.enrollments_his.size()-1));
                     break;
@@ -299,6 +305,82 @@ public class StudentEnrolment {
 
         return stu;
     }
+
+
+//    public void populate_from_default_file() throws IOException{
+//
+//    }
+
+//    public static void populate_From_csv_file(String csvFile,boolean Haveheader) throws IOException {
+//        CsvHandler ch = CsvHandler.get_instance();
+//        boolean readable = ch.add_file_name(csvFile);
+//        ArrayList<String> arr = new ArrayList<String>();
+//        if (readable){
+//            ch.Init_file(csvFile,Haveheader,arr);
+//        } else {
+//            System.out.println("the system could not detect the file");
+//        }
+//    }
+
+//    public static void populate_from_csv_files(HashMap<String,String> FilesKey) throws IOException {
+//        ArrayList<String> keys = new ArrayList<String>(FilesKey.keySet());
+//        CsvHandler ch = CsvHandler.get_instance();
+//        boolean allValid = true;
+//        File f;
+//        for (int i = 0;i<keys.size();i++){
+//            String filename = FilesKey.get(keys.get(i));
+//            f = new File(filename);
+//            if (!f.exists() || f.isDirectory()){
+//                allValid = false;
+//                break;
+//            }
+//        }
+//        if (!allValid){
+//            System.out.println("one of the input files may have problem");
+//        }else {
+//            for (int i = 0;i<keys.size();i++){
+//                populate_From_csv_file(FilesKey.get(keys.get(i)),false);
+//            }
+//        }
+//    }
+//
+//    private static void populatebytype(String type,String[] data) throws ParseException {
+//        StudentEnrolment stuE = StudentEnrolment.getInstance();
+//        switch (type){
+//            case "student":
+//                String sid = data[0];
+//                String name = data[1];
+//                String dobStr = data[2];
+//                String[] dobStrList = dobStr.split("/");
+//                String month  = dobStrList[0];
+//                String day = dobStrList[1];
+//                String year = dobStrList[2];
+//                if (day.length() == 1){
+//                    day = "0"+day;
+//                }
+//                if (month.length() == 0){
+//                    month = "0"+month;
+//                }
+//                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+//                String finalStr = day+"/"+month+"/"+year;
+//                Date dob = formatter.parse(finalStr);
+//                Student s = new Student(sid,name,dob);
+//                stuE.add_student(s);
+//            case "course":
+//                String cid = data[0];
+//                String cname = data[1];
+//                String credit = data[2];
+//                course c = new course(cid,cname,Integer.parseInt(credit));
+//                stuE.add_course(c);
+//            case "semester_course":
+//                String semester = data[0];
+//                String[] courseIDList = getSliceOfArray
+//                break;
+//            case "enrollment_his":
+//                break;
+//        }
+//    }
+
 
 
 

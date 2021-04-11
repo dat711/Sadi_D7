@@ -1,10 +1,11 @@
 package Rmit_sadi_s3804687;
 
-import java.security.spec.RSAOtherPrimeInfo;
+
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Scanner;
+import java.text.SimpleDateFormat;
 
 
 public class Menu {
@@ -22,7 +23,9 @@ public class Menu {
         return singleton;
     }
 
-    public void main_menu(){
+
+    // main menu
+    public void main_menu() throws ParseException{
         boolean notexit = true;
 
         while (notexit){
@@ -53,7 +56,7 @@ public class Menu {
                 this.CourseMenu();
 
             if (choice.equals("3")){
-                break;
+                enrollment_Menu();
             }
             if (choice.equals("4")){
                 break;
@@ -62,15 +65,11 @@ public class Menu {
 
     }
 
-    private static void viewAllStudent(){
-        StudentEnrolment stuE = StudentEnrolment.getInstance();
-        for(int i =0;i<stuE.getStudentList().size();i++){
-            System.out.println(stuE.getStudentList().get(i));
-        }
-        System.out.println("\n\n");
-    }
+    // student menu
 
-    public void studentMenu(){
+
+    // main menu for student management
+    public void studentMenu() throws ParseException{
         boolean stay = true;
         while (stay){
             System.out.println("welcome to student Menu");
@@ -108,14 +107,16 @@ public class Menu {
 
             }
             if (choice.equals("4")){
-                break;
+                ViewALlStudent();
             }
             if (choice.equals("5")){
                 break;
             }
         }
     }
-    private boolean adding_student_menu(){
+
+    // adding student menu
+    private boolean adding_student_menu() throws ParseException {
         StudentEnrolment stuE = StudentEnrolment.getInstance();
         boolean keepLoop = true;
 
@@ -204,7 +205,15 @@ public class Menu {
                 }
                 else return false;
             }
-            Date dob = new Date(y,m,d);
+            if (m < 10){
+                month = "0"+month;
+            }
+            if (d < 10){
+                day = "0"+day;
+            }
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+            String finalStr = day+"/"+month + "/"+year;
+            Date dob = formatter.parse(finalStr);
             Student newS = new Student(id,name,dob);
             stuE.add_student(newS);
 
@@ -216,6 +225,7 @@ public class Menu {
         return true;
     }
 
+    // function for brwose and search student profile
     private static void view_student_profile(){
         StudentEnrolment stuE = StudentEnrolment.getInstance();
         System.out.println("please type in the student id that you want to view");
@@ -237,6 +247,26 @@ public class Menu {
 
 
     }
+
+
+
+    // View all student
+    private static void ViewALlStudent(){
+        StudentEnrolment stuE = StudentEnrolment.getInstance();
+        if (stuE.getStudentList().size() == 0){
+            System.out.println("There are no student in the system");
+        }
+        else {
+            for (int i = 0; i< stuE.getStudentList().size();i++){
+                System.out.println(stuE.getStudentList().get(i));
+            }
+        }
+
+    }
+
+    // Course Menu
+
+    // Main course menu
     public void CourseMenu(){
         boolean stay = true;
         while (stay){
@@ -271,7 +301,7 @@ public class Menu {
 
             }
             if (choice.equals("4")){
-                System.out.println("4");
+                break;
             }
             if (choice.equals("5")){
                 break;
@@ -280,6 +310,45 @@ public class Menu {
 
     }
 
+
+    // add course menu
+    private static boolean add_course(){
+        System.out.println("Adding coure menu ");
+        StudentEnrolment stuE = StudentEnrolment.getInstance();
+        System.out.println("Please type in the course id");
+        String cid = sc.next();
+        boolean overlap = false;
+        for (int i = 0;i<stuE.getCourseList().size();i++){
+            if (stuE.getCourseList().get(i).getCouseID().equals(cid)){
+                overlap = true;
+                break;
+            }
+        }
+
+        if (overlap){
+            System.out.println("This course ID is already exists");
+            return false;
+        }
+
+        System.out.println("please type in the course name");
+        String cname = sc.next();
+        System.out.println("Please type in the credit number of this course");
+        String credit = sc.next();
+        boolean parsable = validationHandler.isInteger(credit);
+        while (!parsable){
+            System.out.println("your credit input is not valid, please retype the credit num");
+            credit = sc.next();
+            parsable = validationHandler.isInteger(credit);
+        }
+
+        course newc = new course(cid,cname,Integer.parseInt(credit));
+
+        stuE.add_course(newc);
+
+        return true;
+    }
+
+    // function to add the user to redo a task they are doing
     private static boolean getback(String action){
         System.out.println("Do you want to redo " + action+" (Y/N)");
         String ans = sc.next();
@@ -294,13 +363,20 @@ public class Menu {
         return getback(action);
     }
 
+
+    // enrollment menu
+
+    // main enrollment menu
     private static void enrollment_Menu(){
         System.out.println("welcome to student Menu");
         System.out.println("type 1 to add a new enrollment");
         System.out.println("type 2 to view a enrollment");
         System.out.println("type 3 to generate an enrollment report");
         System.out.println("type 4 to view all enrollment ");
-        System.out.println("type 5 to quit ");
+        System.out.println("type 5 to browse a student enrollment ");
+        System.out.println("type 6 to view offered course at a semeter ");
+        System.out.println("type 7 to update enrollment of a student in a semeter");
+        System.out.println("type 8 to quit ");
         System.out.println("please type here");
 
         ArrayList<String> validIn = new ArrayList<String>();
@@ -309,7 +385,61 @@ public class Menu {
         validIn.add("3");
         validIn.add("4");
         validIn.add("5");
+        validIn.add("6");
+        validIn.add("7");
+        validIn.add("8");
+        validIn.add("9");
+
+
+        String choice = sc.next();
+
+        while (!validIn.contains(choice)){
+            System.out.println("your input is invalid please retype");
+            choice = sc.next();
+        }
+        if (choice.equals("1")){
+//            this.adding_student_menu();
+        }
+        if (choice.equals("2")){
+            view_student_profile();
+            if(!getback("using student menu")){
+//                break;
+            }
+        }
+        if(choice.equals("3")){
+            System.out.println("type in the folder");
+
+        }
+        if (choice.equals("4")){
+            View_all_enrollment();
+        }
+        if (choice.equals("5")){
+//            View_course_of_Student_Sem();
+        }
+        if (choice.equals("6")){
+            getCourseOffered();
+        }
+        if (choice.equals("7")){
+            getCourseOffered();
+        }
+        if (choice.equals("8")){
+            System.out.println("8");
+        }
+        if (choice.equals("9")){
+            getCourseOffered();
+        }
+        if (choice.equals("10")){
+            getCourseOffered();
+        }
+        if (choice.equals("11")){
+            getCourseOffered();
+        }
+
     }
+
+
+
+    // funtion for adding enrollment
 
     private static boolean adding_enrollment(){
         StudentEnrolment stuE = StudentEnrolment.getInstance();
@@ -361,6 +491,8 @@ public class Menu {
         return true;
     }
 
+
+    // function for browing and view a enrollment
     private static void View_a_enrollment(){
         StudentEnrolment stuE = StudentEnrolment.getInstance();
         System.out.println("please type in the student id");
@@ -376,12 +508,16 @@ public class Menu {
 
     }
 
+    // function for view all enrollment
+
     private static void View_all_enrollment(){
         StudentEnrolment stuE = StudentEnrolment.getInstance();
         for (int i = 0;i< stuE.getEnrollments_his().size();i++){
             System.out.println(stuE.getEnrollments_his().get(i));
         }
     }
+
+    // funtion for view courses list a student enroll in a semester
 
     private static boolean View_course_of_Student_Sem(){
         StudentEnrolment stuE = StudentEnrolment.getInstance();
@@ -414,6 +550,8 @@ public class Menu {
         return true;
     }
 
+
+    // function to view list of students enrolled a course in a semester
     private static boolean View_Course_enrolled_in_a_sem(){
         StudentEnrolment stuE = StudentEnrolment.getInstance();
         System.out.println("Let type in the course ID and semester that you're looking for");
@@ -455,14 +593,197 @@ public class Menu {
         return true;
     }
 
+    // function to view course offered to a student in a semester
+    private static boolean getCourseOffered(){
+        StudentEnrolment stuE = StudentEnrolment.getInstance();
+        System.out.println("please enter the semester you are looking for");
+        String sem = sc.next();
+        System.out.println();
+        ArrayList<course> thiOffer = stuE.get_course_Avai_for_sem(sem);
+
+        thiOffer.forEach(course -> {
+            System.out.println(course.getCoursename());
+        });
+        return true;
+    }
+
+    // function to update course offered for a semester
+
+    private static  boolean updateCourseOffered(){
+        StudentEnrolment stuE = StudentEnrolment.getInstance();
+        System.out.println("Update course offered menu");
+        System.out.println("please type in the semester you want to have courses offered update");
+        String sem = sc.next();
+        while (!stuE.getSemester().contains(sem)){
+            System.out.println("your semester is not on the systems yet ?");
+            if (getback("update course offered")){
+                return updateCourseOffered();
+            }else {
+                return false;
+            }
+        }
+        System.out.println("Here are the course that your system offered in the semester "+sem);
+        for(int i =0;i<stuE.get_course_Avai_for_sem(sem).size();i++){
+            System.out.println(stuE.get_course_Avai_for_sem(sem).get(i));
+        };
+
+        System.out.println("Please pick an action to do");
+        System.out.println("type 1 to delete a course from the offered list of this semeter");
+        System.out.println("type 2 to add a course to the offered list of this semester");
+        System.out.println("type 3 if you want to quit this function");
+        String choice = sc.next();
+
+        switch (choice){
+            default:
+                System.out.println("your choice is not valid");
+                if (getback("update course offered")){
+                    return updateCourseOffered();
+                } else return false;
+            case "1":
+                System.out.println("pleae type in the courses id you want to delete");
+                String cid = sc.next();
+                while (!stuE.get_course_Avai_for_sem(sem).contains(cid)){
+                    System.out.println("Your ID is not in the planned course of this semester ");
+                    if (getback("update course offered")){
+                        return updateCourseOffered();
+                    }else return false;
+                }
+                ArrayList<course> temp = new ArrayList<course>();
+                for (int i = 0;i <stuE.get_course_Avai_for_sem(sem).size();i++){
+                    course this_c = stuE.get_course_Avai_for_sem(sem).get(i);
+                    if (this_c.getCouseID().equals(cid)){
+                        temp.addAll(stuE.get_course_Avai_for_sem(sem).subList(0,i));
+                        temp.addAll(stuE.get_course_Avai_for_sem(sem).subList(i+1,stuE.get_course_Avai_for_sem(sem).size() -1));
+                    }
+                }
+                stuE.getSemester_course().put(sem,temp);
+            case "2":
+                System.out.println("pleae type in the courses id you want to delete");
+                String addid = sc.next();
+                while (stuE.get_course_Avai_for_sem(sem).contains(addid)){
+                    System.out.println("Your ID is already in the planned course of this semester ");
+                    if (getback("update course offered")){
+                        return updateCourseOffered();
+                    }else return false;
+                }
+                boolean exist = false;
+
+                for (int i = 0;i < stuE.getCourseList().size();i++){
+                    course this_course = stuE.getCourseList().get(i);
+                    if (this_course.getCouseID().equals(addid)){
+                        exist = true;
+                    }
+                }
+
+                if (!exist){
+                    System.out.println("your course id is not available in the system yet");
+                    if (getback("update course offered")){
+                        return updateCourseOffered();
+                    }else {
+                        return false;
+                    }
+                }
+
+                ArrayList<course> temps = stuE.get_course_Avai_for_sem(sem);
+                course addCourse = stuE.find_course("id",addid);
+                temps.add(addCourse);
+                stuE.getSemester_course().put(sem,temps);
+
+
+            case "3":
+                break;
+
+        }
+        return true;
+
+    }
+
+    // function to update course a student enrolled in a semester
+
+    private static boolean updateStudentEnrolled(){
+        StudentEnrolment stuE = StudentEnrolment.getInstance();
+        System.out.println("Update enrollment of student:");
+        System.out.println("please type in the student ID");
+        String sid = sc.next();
+        if (stuE.find_student("id",sid).size() == 0){
+            System.out.println("your student id is not exist");
+            if (getback("update a student enrollment")){
+                return updateStudentEnrolled();
+            }else return false;
+        }
 
 
 
+        System.out.println("please type in the semester");
+        String sem = sc.next();
+        if (!stuE.getSemester().contains(sem)){
+            System.out.println("your semester is not on the systems");
+            if (getback("update student Enrolled")){
+                return updateStudentEnrolled();
+            }else {
+                return false;
+            }
+        }
+
+        boolean deletable = true;
+        if (stuE.get_course_for_ss(sid,sem).size() == 0){
+            System.out.println("this student haven't enrolled any course in semester "+sem);
+            deletable = false;
+        }else {
+            System.out.println("This is the course thí student have enrolled");
+            for (int i = 0;i<stuE.get_course_for_ss(sid,sem).size();i++){
+                System.out.println(stuE.get_course_for_ss(sid,sem).get(i));
+            }
+        }
+
+        System.out.println("Please type in a function for the system to activate ");
+        System.out.println("type 1 for adding a new course");
+        System.out.println("type 2 for deleting a course");
+        System.out.println("type 3 to quit");
+        String choice = sc.next();
+        switch (choice){
+            default:
+                System.out.println("your input is not match any valid input value");
+                if (getback("update student Enrolled")){
+                    return updateStudentEnrolled();
+                }else return false;
+
+            case "1":
+                System.out.println("please type in the courseID");
+                String cid = sc.next();
+                if (!stuE.get_course_Avai_for_sem(sem).contains(cid)){
+                    System.out.println("the system is not offered the course in this semesters");
+                    if (getback("update student Enrolled")){
+                        return updateStudentEnrolled();
+                    }else return false;
+                };
+                enrollment adde = new enrollment(sid,sem,cid);
+                stuE.addEnrollment(adde);
+                break;
+
+            case "2":
+                if (!deletable){
+                    System.out.println("There are no course to delete ");
+                    if (getback("update student Enrolled")){
+                        return updateStudentEnrolled();
+                    }else return false;
+                }
+                System.out.println("please type in the course id you want to delete");
+                String delCid = sc.next();
+                if (!stuE.get_stu_enrolled(sid,sem).contains(delCid)){
+                    System.out.println("the student with the id "+sid+" did not enroll the course with id "+delCid+" in the semester "+sem);
+                    if (getback("update student Enrolled")){
+                        return updateStudentEnrolled();
+                    }return false;
+                }
+                stuE.delete_enrolment(sid,delCid,sem);
+                break;
+
+            case "3":
+                break;
+        }
+        return true;
+    }
 
 
-
-
-//    private add_stu(){
-//
-//    }
 }

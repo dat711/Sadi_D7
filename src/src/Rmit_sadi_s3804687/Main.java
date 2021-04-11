@@ -79,8 +79,34 @@ public class Main {
 //        Date j = new Date();
 //        System.out.println(j.getYear()+1900);
 
-        Menu m =Menu.getInstance();
-        m.main_menu();
+//        Menu m =Menu.getInstance();
+//        m.main_menu();
+//
+//        HashMap<String,String> a = new HashMap<String,String>();
+//
+//        a.put("The one I love ","LE Mi Na");
+//        a.put("the thing i hate","js");
+//        a.put("the thing i want to learn","java");
+//
+//        List<String> l = new ArrayList<String>(a.keySet());
+//
+//        System.out.println(l);
+
+//        String[] arr = {"s3804687","Dat","11/7/2000"};
+//        for (int i = 0;i<arr.length;i++){
+//            System.out.println(arr[i]);
+//        }
+//        String a = "mana";
+//        int b = Integer.parseInt(a);
+
+//        Date dob = new Date(2000,0,7);
+//        System.out.println(dob);
+
+        String a = "11/7/2000";
+        String[] b = a.split("/");
+        System.out.println(b[0].getClass());
+
+
 
 
     }
