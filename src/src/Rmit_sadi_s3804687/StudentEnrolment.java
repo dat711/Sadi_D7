@@ -3,10 +3,7 @@ package Rmit_sadi_s3804687;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Arrays;
+import java.util.*;
 import java.io.*;
 
 
@@ -173,7 +170,7 @@ public class StudentEnrolment {
                 enrollment this_e = this.enrollments_his.get(i);
                 if ((this_e.getCourseID().equals(course)) && (this_e.getStuID().equals(student) && this_e.getSemester().equals(sem))) {
                     temp.addAll(this.enrollments_his.subList(0,i));
-                    temp.addAll(this.enrollments_his.subList(i+1,this.enrollments_his.size()-1));
+                    temp.addAll(this.enrollments_his.subList(i+1,this.enrollments_his.size()));
                     break;
                 }
             }
@@ -307,82 +304,135 @@ public class StudentEnrolment {
     }
 
 
-//    public void populate_from_default_file() throws IOException{
-//
-//    }
+    public boolean populate_from_default_file(String FileName) throws IOException,ParseException{
+        File f = new File(FileName);
+        boolean readable = f.exists() && !f.isDirectory();
+        if (!readable){
+            System.out.println("the file is not detected by the systems");
+            return false;
+        }else {
+            Scanner sc = new Scanner(f);
+            sc.useDelimiter(",");
+            while(sc.hasNextLine()){
+                String data = sc.nextLine();
+                populateFromData(data);
+            }
+            sc.close();
 
-//    public static void populate_From_csv_file(String csvFile,boolean Haveheader) throws IOException {
-//        CsvHandler ch = CsvHandler.get_instance();
-//        boolean readable = ch.add_file_name(csvFile);
-//        ArrayList<String> arr = new ArrayList<String>();
-//        if (readable){
-//            ch.Init_file(csvFile,Haveheader,arr);
-//        } else {
-//            System.out.println("the system could not detect the file");
-//        }
-//    }
+        }
+        return true;
+    }
 
-//    public static void populate_from_csv_files(HashMap<String,String> FilesKey) throws IOException {
-//        ArrayList<String> keys = new ArrayList<String>(FilesKey.keySet());
-//        CsvHandler ch = CsvHandler.get_instance();
-//        boolean allValid = true;
-//        File f;
-//        for (int i = 0;i<keys.size();i++){
-//            String filename = FilesKey.get(keys.get(i));
-//            f = new File(filename);
-//            if (!f.exists() || f.isDirectory()){
-//                allValid = false;
-//                break;
-//            }
-//        }
-//        if (!allValid){
-//            System.out.println("one of the input files may have problem");
-//        }else {
-//            for (int i = 0;i<keys.size();i++){
-//                populate_From_csv_file(FilesKey.get(keys.get(i)),false);
-//            }
-//        }
-//    }
-//
-//    private static void populatebytype(String type,String[] data) throws ParseException {
-//        StudentEnrolment stuE = StudentEnrolment.getInstance();
-//        switch (type){
-//            case "student":
-//                String sid = data[0];
-//                String name = data[1];
-//                String dobStr = data[2];
-//                String[] dobStrList = dobStr.split("/");
-//                String month  = dobStrList[0];
-//                String day = dobStrList[1];
-//                String year = dobStrList[2];
-//                if (day.length() == 1){
-//                    day = "0"+day;
-//                }
-//                if (month.length() == 0){
-//                    month = "0"+month;
-//                }
-//                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-//                String finalStr = day+"/"+month+"/"+year;
-//                Date dob = formatter.parse(finalStr);
-//                Student s = new Student(sid,name,dob);
-//                stuE.add_student(s);
-//            case "course":
-//                String cid = data[0];
-//                String cname = data[1];
-//                String credit = data[2];
-//                course c = new course(cid,cname,Integer.parseInt(credit));
-//                stuE.add_course(c);
-//            case "semester_course":
-//                String semester = data[0];
-//                String[] courseIDList = getSliceOfArray
-//                break;
-//            case "enrollment_his":
-//                break;
-//        }
-//    }
+    private static void populateFromData(String data) throws ParseException{
+        StudentEnrolment stuE = StudentEnrolment.getInstance();
 
+        String[] StrL = data.split(",");
+        String sid = StrL[0];
+        String sname = StrL[1];
+        String dobStr = StrL[2];
+        String cid = StrL[3];
+        String cname = StrL[4];
+        String credit = StrL[5];
+        String semester = StrL[6];
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        String[] dobList = dobStr.split("/");
+        String month = dobList[0];
+        String day = dobList[1];
+        String year = dobList[2];
+        if (month.length() == 1){
+            month = "0"+month;
+        }
+        if (day.length() == 0){
+            day = "0"+day;
+        }
+        String FinalDay = day+"-"+month+"-"+year;
+        Date dob = formatter.parse(FinalDay);
+        if (stuE.find_student("id",sid).size() == 0){
+            Student s = new Student(sid,sname,dob);
+            stuE.add_student(s);
+        }
+        boolean exist = false;
+        for(int i = 0;i< stuE.getCourseList().size();i++){
+            if (stuE.getCourseList().get(i).getCouseID().equals(cid)){
+                exist = true;
+                break;
+            }
+        }
+        course c = new course(cid,cname,Integer.parseInt(credit));
+        if(!exist){
+            stuE.add_course(c);
+        }
+
+        if (stuE.getSemester_course().containsKey(semester)){
+
+            boolean added = false;
+            for(int i =0;i< stuE.getSemester_course().get(semester).size();i++){
+                if (stuE.getSemester_course().get(semester).get(i).getCouseID().equals(cid)){
+                    added = true;
+                    break;
+                }
+            }
+            if (!added){
+                stuE.add_course_to_sem(cid,semester);
+            }
+        }else {
+            if (!stuE.getSemester().contains(semester)){
+                stuE.addSemeser(semester);
+            }
+            ArrayList<course> MTC = new ArrayList<course>();
+            MTC.add(c);
+            stuE.getSemester_course().put(semester,MTC);
+        }
+
+        enrollment e = new enrollment(sid,semester,cid);
+        stuE.addEnrollment(e);
+    }
 
 
+    public boolean Generate_Report(String Dirname,String Filename,ArrayList<String> data,boolean newline) throws IOException{
+        File f = new File(Dirname);
+        if (!f.exists() && !f.isDirectory()){
+            System.out.println("this directory is not exists, double check your path please");
+            return false;
+        }
+
+        String path = Dirname+"/"+Filename;
+
+        try {
+            File myobj = new File(path);
+            if (myobj.createNewFile()){
+                System.out.println("file created");
+            }
+            else {
+                System.out.println("this file is already exist");
+            }
+            FileWriter fw = new FileWriter(path);
+            String listString = "";
+            if (!newline){
+
+                for (int i = 0;i<data.size();i++){
+                    listString  = listString +data.get(i);
+                    if (i != data.size()-1 ){
+                        listString  = listString+",";
+                    }
+                }
+
+                fw.write(listString);
+            }else {
+                for (int i = 0;i<data.size();i++){
+                    fw.write(data.get(i));
+                    fw.write("\n");
+                    }
+            }
 
 
+            fw.close();
+        }catch (IOException e){
+            System.out.println("Problem occured");
+            e.printStackTrace();
+            return false;
+        }
+
+    return true;
+    }
 }

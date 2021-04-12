@@ -1,6 +1,7 @@
 package Rmit_sadi_s3804687;
 
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,7 +26,14 @@ public class Menu {
 
 
     // main menu
-    public void main_menu() throws ParseException{
+    public void main_menu() throws ParseException, IOException {
+        StudentEnrolment stuE = StudentEnrolment.getInstance();
+        System.out.println("please type in the path of the file you want to the data to populate from");
+        String path = sc.next();
+        while (!stuE.populate_from_default_file(path)){
+            System.out.println("please retype the path");
+            path = sc.next();
+        }
         boolean notexit = true;
 
         while (notexit){
@@ -63,6 +71,9 @@ public class Menu {
             }
         }
 
+
+
+
     }
 
     // student menu
@@ -75,9 +86,8 @@ public class Menu {
             System.out.println("welcome to student Menu");
             System.out.println("type 1 to add a new student");
             System.out.println("type 2 to view a student profile");
-            System.out.println("type 3 to generate student report");
-            System.out.println("type 4 to view all student's basic infomation ");
-            System.out.println("type 5 to quit ");
+            System.out.println("type 3 to view all student's basic infomation ");
+            System.out.println("type 4 to quit ");
             System.out.println("please type here");
 
             ArrayList<String> validIn = new ArrayList<String>();
@@ -85,7 +95,7 @@ public class Menu {
             validIn.add("2");
             validIn.add("3");
             validIn.add("4");
-            validIn.add("5");
+
 
             String choice = sc.next();
 
@@ -103,15 +113,13 @@ public class Menu {
                 }
             }
             if(choice.equals("3")){
-                System.out.println("type in the folder");
+                ViewALlStudent();
 
             }
             if (choice.equals("4")){
-                ViewALlStudent();
-            }
-            if (choice.equals("5")){
                 break;
             }
+
         }
     }
 
@@ -129,7 +137,7 @@ public class Menu {
                 System.out.println(valH.valid_stuID(id));
                 System.out.println("your id input is ot having appropriate format");
                 if (getback("add student")){
-                    System.out.println("run 1");
+
                     return adding_student_menu();
                 }
                 else return false;
@@ -139,7 +147,6 @@ public class Menu {
 
                 System.out.println("the id already exist");
                 if(getback("add student")){
-                    System.out.println("run 2");
                     return adding_student_menu();
                 }
                 else return false;
@@ -148,20 +155,15 @@ public class Menu {
             System.out.println("this student were born at day: ");
             String day = sc.next();
             if (!validationHandler.isInteger(day)){
-                System.out.println("came here");
                 if (getback("add student")){
-                    System.out.println("run 3");
                     return adding_student_menu();
                 }
                 else return false;
             }
             int d = Integer.parseInt(day);
-            System.out.println("got d as "+d);
             if (d < 1 || d > 31) {
-                System.out.println("come to check day range");
                 System.out.println("your day input is out of valid range");
                 if (getback("add student")) {
-                    System.out.println("run 4");
                     return adding_student_menu();
                 }
                 else return false;
@@ -171,7 +173,6 @@ public class Menu {
             if (!validationHandler.isInteger(month)){
                 System.out.println("your month input should be a number");
                 if(getback("add student")){
-                    System.out.println("run 5");
                     return adding_student_menu();
                 }
                 else return false;
@@ -180,9 +181,9 @@ public class Menu {
             if (m <1 || m > 12){
                 System.out.println("your month input is out of valid range");
                 if(getback("add student")){
-                    System.out.println("run 6");
                     return adding_student_menu();
                 }
+
                 else return false;
             }
             System.out.println("please type in the year this student were born");
@@ -190,7 +191,6 @@ public class Menu {
             if (!validationHandler.isInteger(year)){
                 System.out.println("your year input is not a number");
                 if(getback("add student")){
-                    System.out.println("run 7");
                     return adding_student_menu();
                 }
                 else return false;
@@ -200,7 +200,6 @@ public class Menu {
             if (y < 1950 || y >dd.getYear() + 1882  ){
                 System.out.println("your year input is ot of valid age range the student age should be more than 18");
                 if (getback("add student")){
-                    System.out.println("run 8");
                     return adding_student_menu();
                 }
                 else return false;
@@ -218,7 +217,6 @@ public class Menu {
             stuE.add_student(newS);
 
             if (!getback("add student")){
-                System.out.println("run 9");
                 keepLoop = false;
             }
         }
@@ -273,17 +271,13 @@ public class Menu {
             System.out.println("welcome to course Menu");
             System.out.println("type 1 to add a new course");
             System.out.println("type 2 to view a course profile");
-            System.out.println("type 3 to generate course report");
-            System.out.println("type 4 to quit ");
+            System.out.println("type 3 to quit ");
             System.out.println("please type here");
 
             ArrayList<String> validIn = new ArrayList<String>();
             validIn.add("1");
             validIn.add("2");
             validIn.add("3");
-            validIn.add("4");
-            validIn.add("5");
-            validIn.add("6");
             String choice = sc.next();
 
             while (!validIn.contains(choice)){
@@ -291,20 +285,13 @@ public class Menu {
                 choice = sc.next();
             }
             if (choice.equals("1")){
-                System.out.println("add a student");
+                add_course();
             }
             if (choice.equals("2")){
-                System.out.println("view who");
+                ViewCourseProfile();
             }
             if(choice.equals("3")){
                 System.out.println("type in the folder");
-
-            }
-            if (choice.equals("4")){
-                break;
-            }
-            if (choice.equals("5")){
-                break;
             }
         }
 
@@ -348,6 +335,30 @@ public class Menu {
         return true;
     }
 
+    private static boolean ViewCourseProfile(){
+        StudentEnrolment stuE = StudentEnrolment.getInstance();
+        System.out.println("Please type in the ID of the course you want to view");
+        String cid = sc.next();
+        boolean Notexist = true;
+        for (int i = 0; i< stuE.getCourseList().size();i++){
+            if(stuE.getCourseList().get(i).getCouseID().equals(cid)){
+                Notexist = false;
+                break;
+            }
+        }
+
+        if (Notexist){
+            System.out.println("your course is not added to the system yet");
+            if (getback("view course profile")){
+                return ViewCourseProfile();
+            }else return false;
+        }
+        System.out.println("the course information is");
+        System.out.println(stuE.find_course("id",cid));
+
+        return true;
+    }
+
     // function to add the user to redo a task they are doing
     private static boolean getback(String action){
         System.out.println("Do you want to redo " + action+" (Y/N)");
@@ -367,16 +378,17 @@ public class Menu {
     // enrollment menu
 
     // main enrollment menu
-    private static void enrollment_Menu(){
+    private static void enrollment_Menu() throws IOException{
         System.out.println("welcome to student Menu");
         System.out.println("type 1 to add a new enrollment");
         System.out.println("type 2 to view a enrollment");
-        System.out.println("type 3 to generate an enrollment report");
-        System.out.println("type 4 to view all enrollment ");
-        System.out.println("type 5 to browse a student enrollment ");
-        System.out.println("type 6 to view offered course at a semeter ");
-        System.out.println("type 7 to update enrollment of a student in a semeter");
-        System.out.println("type 8 to quit ");
+        System.out.println("type 3 to view all enrollment ");
+        System.out.println("type 4 to view a student's enrollments in a semester");
+        System.out.println("type 5 to view offered course at a semester ");
+        System.out.println("type 6 to view list of student enrolled a courses in a semester");
+        System.out.println("type 7 to update enrollment of a student in a semester");
+        System.out.println("type 8 to update course offered in a semester");
+        System.out.println("type 0 to quit ");
         System.out.println("please type here");
 
         ArrayList<String> validIn = new ArrayList<String>();
@@ -388,8 +400,7 @@ public class Menu {
         validIn.add("6");
         validIn.add("7");
         validIn.add("8");
-        validIn.add("9");
-
+        validIn.add("0");
 
         String choice = sc.next();
 
@@ -398,43 +409,36 @@ public class Menu {
             choice = sc.next();
         }
         if (choice.equals("1")){
-//            this.adding_student_menu();
+            adding_enrollment();
         }
         if (choice.equals("2")){
-            view_student_profile();
-            if(!getback("using student menu")){
-//                break;
-            }
+            View_a_enrollment();
         }
         if(choice.equals("3")){
-            System.out.println("type in the folder");
-
-        }
-        if (choice.equals("4")){
             View_all_enrollment();
         }
+        if (choice.equals("4")){
+            View_course_of_Student_Sem();
+        }
         if (choice.equals("5")){
-//            View_course_of_Student_Sem();
+            getCourseOffered();
         }
         if (choice.equals("6")){
-            getCourseOffered();
+            View_Course_enrolled_in_a_sem();
         }
         if (choice.equals("7")){
-            getCourseOffered();
+            updateStudentEnrolled();
+
         }
         if (choice.equals("8")){
-            System.out.println("8");
-        }
-        if (choice.equals("9")){
-            getCourseOffered();
-        }
-        if (choice.equals("10")){
-            getCourseOffered();
-        }
-        if (choice.equals("11")){
-            getCourseOffered();
+            updateCourseOffered();
         }
 
+        if(!choice.equals("0")){
+            if (getback("using enrollment menu")){
+                enrollment_Menu();
+            }
+        }
     }
 
 
@@ -493,7 +497,7 @@ public class Menu {
 
 
     // function for browing and view a enrollment
-    private static void View_a_enrollment(){
+    private static boolean View_a_enrollment(){
         StudentEnrolment stuE = StudentEnrolment.getInstance();
         System.out.println("please type in the student id");
         String id = sc.next();
@@ -504,13 +508,22 @@ public class Menu {
         ArrayList<enrollment> enr = stuE.get_enrolment(id,cid,semester);
         if (enr.size() == 0){
             System.out.println("there are no match of your input");
+            if (getback("view a enrollment")){
+                return View_a_enrollment();
+            }else return false;
+        }else {
+            System.out.println(enr.get(0));
         }
+
+        return true;
+
 
     }
 
     // function for view all enrollment
 
     private static void View_all_enrollment(){
+        System.out.println("All enrollment in system is");
         StudentEnrolment stuE = StudentEnrolment.getInstance();
         for (int i = 0;i< stuE.getEnrollments_his().size();i++){
             System.out.println(stuE.getEnrollments_his().get(i));
@@ -519,7 +532,7 @@ public class Menu {
 
     // funtion for view courses list a student enroll in a semester
 
-    private static boolean View_course_of_Student_Sem(){
+    private static boolean View_course_of_Student_Sem() throws IOException{
         StudentEnrolment stuE = StudentEnrolment.getInstance();
         System.out.println("Let type in the student ID that you're looking for");
         System.out.println("Let enter the student ID");
@@ -544,15 +557,36 @@ public class Menu {
             System.out.println("the student doesn't have a course in this semester");
         }else {
             for (int i = 0;i<stuE.get_course_for_ss(id,sem).size();i++){
-                System.out.println(stuE.get_course_for_ss(id,sem));
+                System.out.println(stuE.get_course_for_ss(id,sem).get(i));
             }
         }
+        System.out.println("do you want to generate report for this list");
+        System.out.println("type Y/N only");
+
+        String choice = sc.next();
+        choice = choice.toLowerCase();
+        ArrayList<String> data = new ArrayList<String>();
+        stuE.get_course_for_ss(id,sem).forEach(course -> {
+            data.add(course.toString());
+        });
+
+        switch (choice){
+            case "n":
+                break;
+            case "y":
+                System.out.println("please type in the directory you want to store the report");
+                String dir = sc.next();
+                System.out.println("please type in the file name");
+                String file = sc.next();
+                if(stuE.Generate_Report(dir,file,data,true));
+        }
+
         return true;
     }
 
 
     // function to view list of students enrolled a course in a semester
-    private static boolean View_Course_enrolled_in_a_sem(){
+    private static boolean View_Course_enrolled_in_a_sem() throws IOException{
         StudentEnrolment stuE = StudentEnrolment.getInstance();
         System.out.println("Let type in the course ID and semester that you're looking for");
         System.out.println("Let enter the coure ID");
@@ -590,11 +624,33 @@ public class Menu {
                 System.out.println(stuE.get_stu_enrolled(sem,cid).get(i));
             }
         }
+
+        System.out.println("do you want to generate report for this list");
+        System.out.println("type Y/N only");
+
+        String choice = sc.next();
+        choice = choice.toLowerCase();
+        ArrayList<String> data = new ArrayList<String>();
+        stuE.get_stu_enrolled(sem,cid).forEach(student -> {
+            data.add(student.toString());
+        });
+
+        switch (choice){
+            case "n":
+                break;
+            case "y":
+                System.out.println("please type in the directory you want to store the report");
+                String dir = sc.next();
+                System.out.println("please type in the file name");
+                String file = sc.next();
+                if(stuE.Generate_Report(dir,file,data,true));
+        }
+
         return true;
     }
 
     // function to view course offered to a student in a semester
-    private static boolean getCourseOffered(){
+    private static boolean getCourseOffered() throws IOException{
         StudentEnrolment stuE = StudentEnrolment.getInstance();
         System.out.println("please enter the semester you are looking for");
         String sem = sc.next();
@@ -604,6 +660,26 @@ public class Menu {
         thiOffer.forEach(course -> {
             System.out.println(course.getCoursename());
         });
+        System.out.println("do you want to generate report for this list");
+        System.out.println("type Y/N only");
+
+        String choice = sc.next();
+        choice = choice.toLowerCase();
+        ArrayList<String> data = new ArrayList<String>();
+        thiOffer.forEach(course -> {
+            data.add(course.toString());
+        });
+
+        switch (choice){
+            case "n":
+                break;
+            case "y":
+                System.out.println("please type in the directory you want to store the report");
+                String dir = sc.next();
+                System.out.println("please type in the file name");
+                String file = sc.next();
+                if(stuE.Generate_Report(dir,file,data,true));
+        }
         return true;
     }
 
@@ -612,7 +688,7 @@ public class Menu {
     private static  boolean updateCourseOffered(){
         StudentEnrolment stuE = StudentEnrolment.getInstance();
         System.out.println("Update course offered menu");
-        System.out.println("please type in the semester you want to have courses offered update");
+        System.out.println("please type in the semester you want to update courses offered ");
         String sem = sc.next();
         while (!stuE.getSemester().contains(sem)){
             System.out.println("your semester is not on the systems yet ?");
@@ -653,12 +729,12 @@ public class Menu {
                     course this_c = stuE.get_course_Avai_for_sem(sem).get(i);
                     if (this_c.getCouseID().equals(cid)){
                         temp.addAll(stuE.get_course_Avai_for_sem(sem).subList(0,i));
-                        temp.addAll(stuE.get_course_Avai_for_sem(sem).subList(i+1,stuE.get_course_Avai_for_sem(sem).size() -1));
+                        temp.addAll(stuE.get_course_Avai_for_sem(sem).subList(i+1,stuE.get_course_Avai_for_sem(sem).size()));
                     }
                 }
                 stuE.getSemester_course().put(sem,temp);
             case "2":
-                System.out.println("pleae type in the courses id you want to delete");
+                System.out.println("pleae type in the courses id you want to add");
                 String addid = sc.next();
                 while (stuE.get_course_Avai_for_sem(sem).contains(addid)){
                     System.out.println("Your ID is already in the planned course of this semester ");
@@ -730,7 +806,7 @@ public class Menu {
             System.out.println("this student haven't enrolled any course in semester "+sem);
             deletable = false;
         }else {
-            System.out.println("This is the course thí student have enrolled");
+            System.out.println("This is the course this student have enrolled");
             for (int i = 0;i<stuE.get_course_for_ss(sid,sem).size();i++){
                 System.out.println(stuE.get_course_for_ss(sid,sem).get(i));
             }
@@ -784,6 +860,5 @@ public class Menu {
         }
         return true;
     }
-
 
 }
