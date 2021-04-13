@@ -10,9 +10,6 @@ public class validationHandler {
         return singleton;
     }
 
-    public boolean valid_day(){
-        return true;
-    }
 
     public static boolean isInteger(String str) {
         if (str == null) {

@@ -10,16 +10,6 @@ import java.io.*;
 
 public class StudentEnrolment {
 
-    /* the attribute name and explanied
-    stuE is used as the only instance of this class
-    courseList store the available course on the system
-    studentlist store the available student on the system
-    Semesters store all the semesters that stored on the systems
-    semester_course store a pair of semester and list of available course in that semester
-    enrollmentStudentHashMap store data about the student list enrolled to a course at a specific semester
-    courseEnrolled store data about the course a student enrolled at a specific semester
-    * */
-
 
     private static StudentEnrolment stuE = null;
     private ArrayList<course>  courseList;
@@ -38,6 +28,10 @@ public class StudentEnrolment {
 
 
 
+    }
+
+    public void reset(){
+        stuE = null;
     }
 
 // get semester for displaying
@@ -291,11 +285,8 @@ public class StudentEnrolment {
         }
 
         for (int i = 0; i < this.studentList.size();i++){
-//            System.out.println("aaaaaa");
             Student this_Stu = this.studentList.get(i);
-
             if (stuId.contains(this_Stu.getId())){
-
                 stu.add(this_Stu);
             }
         }

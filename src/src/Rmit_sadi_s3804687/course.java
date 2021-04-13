@@ -1,9 +1,9 @@
 package Rmit_sadi_s3804687;
 
 public class course {
-    private   String CouseID;
+    private String CouseID;
     private String Coursename;
-    private int num_credit ;
+    private int num_credit;
 
     public course(String couseID, String coursename, int num_credit) {
         CouseID = couseID;
